@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="00e0f460-8f50-44ac-9580-761fffc12830" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../mainPage/src" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../mainPage/src/controllers/UserController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../mainPage/src/fonts/Quicksand/OFL.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../mainPage/src/fonts/Quicksand/Quicksand-VariableFont_wght.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../mainPage/src/fonts/Quicksand/README.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../mainPage/src/fonts/Quicksand/static/Quicksand-Bold.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../mainPage/src/fonts/Quicksand/static/Quicksand-Light.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../mainPage/src/fonts/Quicksand/static/Quicksand-Medium.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../mainPage/src/fonts/Quicksand/static/Quicksand-Regular.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../mainPage/src/fonts/Quicksand/static/Quicksand-SemiBold.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../mainPage/src/fonts/Seaweed_Script/OFL.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../mainPage/src/fonts/Seaweed_Script/SeaweedScript-Regular.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../mainPage/src/main/Main.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../mainPage/src/models/User.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../mainPage/src/models/UserModel.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../mainPage/src/styles/UIStyle.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../mainPage/src/views/MainView.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../mainPage/src/views/UserView.java" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="ROOT_SYNC" value="SYNC" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 7
+}]]></component>
+  <component name="ProjectId" id="2o7FQvxgGTRnD5vUkMHkwYP1AoU" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Main.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/sdp_final/mainView",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RunManager">
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="main.Main" />
+      <module name="mainView" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="main.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Main" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="00e0f460-8f50-44ac-9580-761fffc12830" name="Changes" comment="" />
+      <created>1730212694512</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1730212694512</updated>
+      <workItem from="1730212695531" duration="922000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
