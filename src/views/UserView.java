@@ -5,6 +5,8 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
+
 import styles.UIStyle;
 
 public class UserView extends JFrame {
@@ -29,8 +31,8 @@ public class UserView extends JFrame {
 
         // Adding fonts to app labels
         try {
-            Font customFontBig = Font.createFont(Font.TRUETYPE_FONT, new File("src/fonts/Quicksand/static/Quicksand-Bold.ttf")).deriveFont(28f);
-            Font customFontMedium = Font.createFont(Font.TRUETYPE_FONT, new File("src/fonts/Quicksand/static/Quicksand-Medium.ttf")).deriveFont(20f);
+            Font customFontBig = Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(getClass().getResourceAsStream("/fonts/Quicksand/static/Quicksand-Bold.ttf"))).deriveFont(28f);
+            Font customFontMedium = Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(getClass().getResourceAsStream("/fonts/Quicksand/static/Quicksand-Medium.ttf"))).deriveFont(20f);
             titleLabel.setFont(customFontBig);
 
             email.setFont(customFontMedium);
