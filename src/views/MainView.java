@@ -10,7 +10,7 @@ public class MainView extends JFrame {
 
     public MainView(String userName) {
         setTitle("Main Application");
-        setSize(400, 300);
+        setSize(800, 600);  // Используем размер из ветки anuar
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JTabbedPane tabbedPane = new JTabbedPane();
@@ -27,6 +27,9 @@ public class MainView extends JFrame {
         tabbedPane.add("Log out", logoutPanel);
 
         add(tabbedPane);
+
+        // Centers the window on the screen
+        setLocationRelativeTo(null);  // Оставляем код для центрирования окна
     }
 
     public void addLogoutListener(ActionListener listener) {
