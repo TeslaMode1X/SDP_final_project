@@ -29,7 +29,7 @@ public class UserController {
             User user = model.authenticate(email, password);
             if (user != null) {
                 view.showMessage("Welcome, " + user.getName() + "!");
-                openMainView(user.getName());  // Pass the username
+                openMainView(user); // Передаем объект User
             } else {
                 view.showMessage("Invalid email or password.");
             }
@@ -45,24 +45,24 @@ public class UserController {
             if (!email.isEmpty() && !password.isEmpty() && !name.isEmpty()) {
                 model.addUser(new User(email, password, name));
                 view.showMessage("Registration successful!");
-                openMainView(name);  // Pass the name to the main view
+                openMainView(new User(email, password, name)); // Передаем зарегистрированного пользователя
             } else {
                 view.showMessage("Please fill in all fields.");
             }
         }
     }
 
-    private void openMainView(String userName) {
-        mainView = new MainView(userName);  // Initialize with the user's name
+    private void openMainView(User user) {
+        mainView = new MainView(user.getName(), user); // Передаем имя и пользователя
         mainView.setVisible(true);
         mainView.addLogoutListener(new LogoutListener());
-        view.dispose();  // Close the login/registration window
+        view.dispose(); // Закрываем окно входа/регистрации
     }
 
     class LogoutListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             mainView.dispose();
-            view.setVisible(true);  // Show the login/registration window again
+            view.setVisible(true); // Отображаем окно входа/регистрации снова
         }
     }
 }
