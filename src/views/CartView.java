@@ -67,7 +67,8 @@ public class CartView extends JPanel {
 
     private void checkout() {
         double total = orderController.checkout();
-        JOptionPane.showMessageDialog(this, "Order placed. Total: $" + total);
+        new PaymentView(total); // Открываем окно оплаты
         updateCartDisplay(); // Очищаем корзину после оформления заказа
     }
+
 }
