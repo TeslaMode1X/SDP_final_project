@@ -1,74 +1,75 @@
 package views;
 
 import controllers.OrderController;
-import models.Cart;
 import models.MenuItem;
+import models.OrderDetails;
 import models.User;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.List;
 
 public class CartView extends JPanel {
-    private OrderController orderController;
-    private JPanel cartItemsPanel; // Панель для отображения позиций в корзине
-    private JLabel totalLabel; // Метка для отображения общей стоимости
-    private User user;
+    private final OrderController orderController;
+    private final List<OrderDetails> orderHistory;
+    private JPanel cartItemsPanel;
+    private JLabel totalLabel;
+    private JButton checkoutButton; // Кнопка для оформления заказа
 
-    public CartView(OrderController orderController, User user) {
+    public CartView(OrderController orderController, User user, List<OrderDetails> orderHistory) {
         this.orderController = orderController;
-        this.user = user;
+        this.orderHistory = orderHistory;
 
         setLayout(new BorderLayout());
 
         cartItemsPanel = new JPanel();
         cartItemsPanel.setLayout(new BoxLayout(cartItemsPanel, BoxLayout.Y_AXIS));
+        totalLabel = new JLabel("Total: $0.0");
 
-        totalLabel = new JLabel();
-        updateCartDisplay(); // Отображаем начальное состояние корзины
-
-        JButton checkoutButton = new JButton("Checkout");
+        // Создаем кнопку Checkout
+        checkoutButton = new JButton("Checkout");
         checkoutButton.addActionListener(e -> checkout());
 
+        // Добавляем компоненты на панель
         add(new JScrollPane(cartItemsPanel), BorderLayout.CENTER);
-        add(totalLabel, BorderLayout.NORTH);
-        add(checkoutButton, BorderLayout.SOUTH);
+        add(totalLabel, BorderLayout.SOUTH);
+        add(checkoutButton, BorderLayout.NORTH); // Добавляем кнопку Checkout наверху
+
+        updateCartDisplay(); // Начальное обновление отображения корзины
     }
 
     public void updateCartDisplay() {
-        Cart cart = Cart.getInstance(user); // Получаем корзину пользователя
-        cartItemsPanel.removeAll(); // Очищаем панель перед повторным добавлением элементов
+        cartItemsPanel.removeAll();
+        List<MenuItem> items = orderController.getCart().getItems();
+        double total = 0;
 
-        for (MenuItem item : cart.getItems()) {
+        for (MenuItem item : items) {
             JPanel itemPanel = new JPanel(new BorderLayout());
             JLabel itemLabel = new JLabel(item.getName() + " - $" + item.getPrice());
+            JButton removeButton = new JButton("Remove");
 
-            // Кнопка для удаления товара
-            JButton removeButton = new JButton("X");
-            removeButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    orderController.removeItemFromCart(item); // Удаляем товар из корзины
-                    updateCartDisplay(); // Обновляем отображение корзины
-                }
+            removeButton.addActionListener(e -> {
+                orderController.removeItemFromCart(item);
+                updateCartDisplay();
             });
 
             itemPanel.add(itemLabel, BorderLayout.CENTER);
             itemPanel.add(removeButton, BorderLayout.EAST);
             cartItemsPanel.add(itemPanel);
+
+            total += item.getPrice();
         }
 
-        // Обновляем общую стоимость
-        totalLabel.setText("Total: $" + cart.getTotalPrice());
-        revalidate(); // Обновляем интерфейс
+        totalLabel.setText("Total: $" + total);
+        revalidate();
         repaint();
     }
 
-    private void checkout() {
+    public void checkout() {
         double total = orderController.checkout();
-        new PaymentView(total); // Открываем окно оплаты
-        updateCartDisplay(); // Очищаем корзину после оформления заказа
+        new PaymentSelectionView(total, orderHistory); // Открываем окно выбора типа оплаты
+        updateCartDisplay();
     }
+
 
 }

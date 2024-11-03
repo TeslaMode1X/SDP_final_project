@@ -2,38 +2,43 @@ package views;
 
 import controllers.MenuController;
 import controllers.OrderController;
+import models.OrderDetails;
 import models.User;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainView extends JFrame {
     private JLabel userNameLabel = new JLabel("", SwingConstants.CENTER);
     private JButton logoutButton = new JButton("Log out");
-
-    private MenuController menuController;
-    private OrderController orderController;
+    private List<OrderDetails> orderHistory = new ArrayList<>(); // Инициализация истории заказов
 
     public MainView(String userName, User user) {
         setTitle("Main Application");
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        this.menuController = new MenuController();
-        this.orderController = new OrderController(user);
+        MenuController menuController = new MenuController();
+        OrderController orderController = new OrderController(user);
 
         JTabbedPane tabbedPane = new JTabbedPane();
 
-        // Cart Tab
-        CartView cartView = new CartView(orderController, user); // Создаем CartView и передаем User
+        // Создание CartView с передачей orderHistory
+        CartView cartView = new CartView(orderController, user, orderHistory);
 
         // Menu Tab
-        MenuView menuView = new MenuView(menuController, orderController, cartView); // Передаем CartView в MenuView
-        tabbedPane.add("Menu", new JScrollPane(menuView)); // Добавляем MenuView в вкладку "Menu"
+        MenuView menuView = new MenuView(menuController, orderController, cartView);
+        tabbedPane.add("Menu", new JScrollPane(menuView));
 
-        // Добавляем CartView во вкладку "Cart"
+        // Добавление CartView во вкладку "Cart"
         tabbedPane.add("Cart", cartView);
+
+        // Добавление HistoryView во вкладку "History"
+        HistoryView historyView = new HistoryView(orderHistory);
+        tabbedPane.add("History", historyView);
 
         // Log Out Tab
         JPanel logoutPanel = new JPanel(new BorderLayout());
