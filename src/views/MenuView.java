@@ -13,54 +13,96 @@ import java.awt.event.ActionListener;
 public class MenuView extends JPanel {
     private MenuController menuController;
     private OrderController orderController;
-    private CartView cartView; // Ссылка на CartView
+    private CartView cartView;
+
+    private JCheckBox drinksCheckbox;
+    private JCheckBox snacksCheckbox;
+    private JCheckBox burgersCheckbox;
+    private JCheckBox combosCheckbox;
+    private JPanel menuItemsPanel;
 
     public MenuView(MenuController menuController, OrderController orderController, CartView cartView) {
         this.menuController = menuController;
         this.orderController = orderController;
         this.cartView = cartView;
 
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS)); // Выравнивание по вертикали
+        setLayout(new BorderLayout());
+
+        // Панель фильтров для категорий
+        JPanel filterPanel = new JPanel();
+        filterPanel.setLayout(new FlowLayout());
+
+        drinksCheckbox = new JCheckBox("Drinks", true);
+        snacksCheckbox = new JCheckBox("Snacks", true);
+        burgersCheckbox = new JCheckBox("Burgers", true);
+        combosCheckbox = new JCheckBox("Combos", true);
+
+        JButton sortButton = new JButton("Sort");
+        sortButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                displayMenu();
+            }
+        });
+
+        filterPanel.add(drinksCheckbox);
+        filterPanel.add(snacksCheckbox);
+        filterPanel.add(burgersCheckbox);
+        filterPanel.add(combosCheckbox);
+        filterPanel.add(sortButton);
+
+        add(filterPanel, BorderLayout.NORTH);
+
+        menuItemsPanel = new JPanel();
+        menuItemsPanel.setLayout(new BoxLayout(menuItemsPanel, BoxLayout.Y_AXIS));
+        add(menuItemsPanel, BorderLayout.CENTER);
+
         displayMenu();
     }
 
     private void displayMenu() {
+        menuItemsPanel.removeAll();
+
         for (Object categoryObj : menuController.getMainMenu().getItems()) {
             if (categoryObj instanceof MenuCategory) {
                 MenuCategory category = (MenuCategory) categoryObj;
 
-                // Заголовок для категории
-                JLabel categoryLabel = new JLabel("Category: " + category.getName());
-                categoryLabel.setFont(new Font("Arial", Font.BOLD, 16));
-                add(categoryLabel);
+                if ((category.getName().equals("Drinks") && drinksCheckbox.isSelected()) ||
+                        (category.getName().equals("Snacks") && snacksCheckbox.isSelected()) ||
+                        (category.getName().equals("Burgers") && burgersCheckbox.isSelected()) ||
+                        (category.getName().equals("Combos") && combosCheckbox.isSelected())) {
 
-                // Отображение позиций в категории
-                for (Object itemObj : category.getItems()) {
-                    if (itemObj instanceof MenuItem) {
-                        MenuItem menuItem = (MenuItem) itemObj;
+                    JLabel categoryLabel = new JLabel("Category: " + category.getName());
+                    categoryLabel.setFont(new Font("Arial", Font.BOLD, 16));
+                    menuItemsPanel.add(categoryLabel);
 
-                        // Панель для каждого элемента меню
-                        JPanel itemPanel = new JPanel(new BorderLayout());
-                        JLabel itemLabel = new JLabel(menuItem.getName() + " - $" + menuItem.getPrice());
-                        JButton addToCartButton = new JButton("Add to Cart");
+                    for (Object itemObj : category.getItems()) {
+                        if (itemObj instanceof MenuItem) {
+                            MenuItem menuItem = (MenuItem) itemObj;
 
-                        // Добавляем действие к кнопке
-                        addToCartButton.addActionListener(new ActionListener() {
-                            @Override
-                            public void actionPerformed(ActionEvent e) {
-                                orderController.addItemToCart(menuItem); // Добавляем товар в корзину
-                                JOptionPane.showMessageDialog(null, menuItem.getName() + " added to cart!");
-                                cartView.updateCartDisplay(); // Обновляем отображение корзины
-                            }
-                        });
+                            JPanel itemPanel = new JPanel(new BorderLayout());
+                            JLabel itemLabel = new JLabel(menuItem.getName() + " - $" + menuItem.getPrice());
+                            JButton addToCartButton = new JButton("Add to Cart");
 
-                        itemPanel.add(itemLabel, BorderLayout.CENTER);
-                        itemPanel.add(addToCartButton, BorderLayout.EAST);
-                        add(itemPanel);
+                            addToCartButton.addActionListener(new ActionListener() {
+                                @Override
+                                public void actionPerformed(ActionEvent e) {
+                                    orderController.addItemToCart(menuItem);
+                                    JOptionPane.showMessageDialog(null, menuItem.getName() + " added to cart!");
+                                    cartView.updateCartDisplay();
+                                }
+                            });
+
+                            itemPanel.add(itemLabel, BorderLayout.CENTER);
+                            itemPanel.add(addToCartButton, BorderLayout.EAST);
+                            menuItemsPanel.add(itemPanel);
+                        }
                     }
+                    menuItemsPanel.add(Box.createVerticalStrut(15));
                 }
-                add(Box.createVerticalStrut(15)); // Добавляем вертикальный отступ между категориями
             }
         }
+        revalidate();
+        repaint();
     }
 }

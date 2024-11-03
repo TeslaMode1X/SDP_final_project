@@ -31,7 +31,9 @@ public class MainView extends JFrame {
 
         // Menu Tab
         MenuView menuView = new MenuView(menuController, orderController, cartView);
-        tabbedPane.add("Menu", new JScrollPane(menuView));
+        JScrollPane menuScrollPane = new JScrollPane(menuView); // Оборачиваем MenuView в JScrollPane
+        menuScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        tabbedPane.add("Menu", menuScrollPane);
 
         // Добавление CartView во вкладку "Cart"
         tabbedPane.add("Cart", cartView);

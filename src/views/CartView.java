@@ -14,7 +14,7 @@ public class CartView extends JPanel {
     private final List<OrderDetails> orderHistory;
     private JPanel cartItemsPanel;
     private JLabel totalLabel;
-    private JButton checkoutButton; // Кнопка для оформления заказа
+    private JButton checkoutButton;
 
     public CartView(OrderController orderController, User user, List<OrderDetails> orderHistory) {
         this.orderController = orderController;
@@ -26,16 +26,14 @@ public class CartView extends JPanel {
         cartItemsPanel.setLayout(new BoxLayout(cartItemsPanel, BoxLayout.Y_AXIS));
         totalLabel = new JLabel("Total: $0.0");
 
-        // Создаем кнопку Checkout
         checkoutButton = new JButton("Checkout");
         checkoutButton.addActionListener(e -> checkout());
 
-        // Добавляем компоненты на панель
         add(new JScrollPane(cartItemsPanel), BorderLayout.CENTER);
         add(totalLabel, BorderLayout.SOUTH);
-        add(checkoutButton, BorderLayout.NORTH); // Добавляем кнопку Checkout наверху
+        add(checkoutButton, BorderLayout.NORTH);
 
-        updateCartDisplay(); // Начальное обновление отображения корзины
+        updateCartDisplay();
     }
 
     public void updateCartDisplay() {
@@ -67,9 +65,7 @@ public class CartView extends JPanel {
 
     public void checkout() {
         double total = orderController.checkout();
-        new PaymentSelectionView(total, orderHistory); // Открываем окно выбора типа оплаты
+        new PaymentSelectionView(total, orderHistory);
         updateCartDisplay();
     }
-
-
 }
