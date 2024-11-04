@@ -2,7 +2,6 @@ package views;
 
 import controllers.MenuController;
 import controllers.OrderController;
-import models.MenuItem;
 import models.OrderDetails;
 import models.User;
 
@@ -15,7 +14,7 @@ import java.util.List;
 public class MainView extends JFrame {
     private JLabel userNameLabel = new JLabel("", SwingConstants.CENTER);
     private JButton logoutButton = new JButton("Log out");
-    private List<OrderDetails> orderHistory = new ArrayList<>(); // Change to List<OrderDetails>
+    private List<OrderDetails> orderHistory = new ArrayList<>();
 
     public MainView(String userName, User user) {
         setTitle("Main Application");
@@ -26,16 +25,17 @@ public class MainView extends JFrame {
         OrderController orderController = new OrderController(user);
 
         JTabbedPane tabbedPane = new JTabbedPane();
+        styleTabbedPane(tabbedPane); // Apply button styles to the tabs
 
         // History
-        HistoryView historyView = new HistoryView(userName, orderHistory); // Passing orderHistory as List<OrderDetails>
+        HistoryView historyView = new HistoryView(userName, orderHistory);
 
         // Creating CartView with orderController and user
         CartView cartView = new CartView(orderController, user, historyView);
 
         // Menu Tab
         MenuView menuView = new MenuView(menuController, orderController, cartView);
-        JScrollPane menuScrollPane = new JScrollPane(menuView); // Wrap MenuView in JScrollPane
+        JScrollPane menuScrollPane = new JScrollPane(menuView);
         menuScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         tabbedPane.add("Menu", menuScrollPane);
 
@@ -45,15 +45,25 @@ public class MainView extends JFrame {
         // Adding HistoryView to the "History" tab
         tabbedPane.add("History", historyView);
 
-        // Log Out Tab
-        JPanel logoutPanel = new JPanel(new BorderLayout());
-        userNameLabel.setText(userName);
-        logoutPanel.add(userNameLabel, BorderLayout.CENTER);
-        logoutPanel.add(logoutButton, BorderLayout.SOUTH);
-        tabbedPane.add("Log out", logoutPanel);
+        LogoutView logoutView = new LogoutView(userName);
+        logoutView.setLogoutButton(logoutButton);
+        tabbedPane.add("Log out", logoutView);
 
         add(tabbedPane);
         setLocationRelativeTo(null);
+    }
+
+    private void styleTabbedPane(JTabbedPane tabbedPane) {
+        tabbedPane.setBackground(new Color(70, 130, 180));
+        tabbedPane.setForeground(Color.WHITE);
+        tabbedPane.setFont(new Font("Arial", Font.BOLD, 14));
+        tabbedPane.setOpaque(true);
+        tabbedPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        for (int i = 0; i < tabbedPane.getTabCount(); i++) {
+            tabbedPane.setBackgroundAt(i, new Color(70, 130, 180));
+            tabbedPane.setForegroundAt(i, Color.WHITE);
+        }
     }
 
     public void addLogoutListener(ActionListener listener) {

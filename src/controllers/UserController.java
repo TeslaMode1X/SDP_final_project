@@ -29,7 +29,7 @@ public class UserController {
             User user = model.authenticate(email, password);
             if (user != null) {
                 view.showMessage("Welcome, " + user.getName() + "!");
-                openMainView(user); // Передаем объект User
+                openMainView(user); // Pass the User object
             } else {
                 view.showMessage("Invalid email or password.");
             }
@@ -42,10 +42,16 @@ public class UserController {
             String password = view.getPassword();
             String name = view.getName();
 
+            // Check if user already exists
+            if (model.userExists(email)) {
+                view.showMessage("User with this email already exists. Please log in.");
+                return; // Exit the method if the user exists
+            }
+
             if (!email.isEmpty() && !password.isEmpty() && !name.isEmpty()) {
                 model.addUser(new User(email, password, name));
                 view.showMessage("Registration successful!");
-                openMainView(new User(email, password, name)); // Передаем зарегистрированного пользователя
+                openMainView(new User(email, password, name)); // Pass the registered User
             } else {
                 view.showMessage("Please fill in all fields.");
             }
@@ -53,16 +59,16 @@ public class UserController {
     }
 
     private void openMainView(User user) {
-        mainView = new MainView(user.getName(), user); // Передаем имя и пользователя
+        mainView = new MainView(user.getName(), user); // Pass name and User object
         mainView.setVisible(true);
         mainView.addLogoutListener(new LogoutListener());
-        view.dispose(); // Закрываем окно входа/регистрации
+        view.dispose(); // Close the login/register window
     }
 
     class LogoutListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            mainView.dispose();
-            view.setVisible(true); // Отображаем окно входа/регистрации снова
+            mainView.dispose(); // Close the main view
+            view.setVisible(true); // Show the UserView again
         }
     }
 }

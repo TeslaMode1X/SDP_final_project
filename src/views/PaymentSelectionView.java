@@ -18,17 +18,35 @@ public class PaymentSelectionView extends JFrame {
         this.historyView = historyView;
 
         setTitle("Select Payment Method");
-        setSize(300, 150);
-        setLayout(new GridLayout(2, 1, 10, 10));
+        setSize(400, 200);
+        setLayout(new GridLayout(3, 1, 10, 10));
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setBackground(new Color(245, 245, 245));
+
+        // Set custom colors
+        Color buttonColor = new Color(100, 150, 250);
+        Font buttonFont = new Font("Arial", Font.BOLD, 16);
 
         JButton payOnDeliveryButton = new JButton("Pay on Delivery");
+        payOnDeliveryButton.setBackground(buttonColor);
+        payOnDeliveryButton.setForeground(Color.WHITE);
+        payOnDeliveryButton.setFont(buttonFont);
+        payOnDeliveryButton.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2));
+        payOnDeliveryButton.setOpaque(true);
+        payOnDeliveryButton.setBorderPainted(false);
+        payOnDeliveryButton.setFocusPainted(false);
+
         JButton payByCardButton = new JButton("Pay by Card");
+        payByCardButton.setBackground(buttonColor);
+        payByCardButton.setForeground(Color.WHITE);
+        payByCardButton.setFont(buttonFont);
+        payByCardButton.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2));
+        payByCardButton.setOpaque(true);
+        payByCardButton.setBorderPainted(false);
+        payByCardButton.setFocusPainted(false);
 
         payOnDeliveryButton.addActionListener(e -> handlePayment("On Delivery", orderDetails));
         payByCardButton.addActionListener(e -> handlePayment("By Card", orderDetails));
-
-        System.out.println(orderDetails);
 
         add(payOnDeliveryButton);
         add(payByCardButton);
