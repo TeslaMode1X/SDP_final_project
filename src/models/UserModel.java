@@ -19,4 +19,14 @@ public class UserModel {
         }
         return null;
     }
+    public boolean userExists(String email) {
+        // Assuming you have a list or a data structure to hold users
+        for (User user : users) {
+            if (user.getEmail().equalsIgnoreCase(email)) {
+                return true; // User found
+            }
+        }
+        return false; // User not found
+    }
+
 }

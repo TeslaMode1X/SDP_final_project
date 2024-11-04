@@ -4,6 +4,7 @@ import controllers.OrderController;
 import models.MenuItem;
 import models.OrderDetails;
 import models.User;
+import styles.UIStyle;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,47 +23,83 @@ public class CartView extends JPanel {
         this.historyView = historyView;
 
         setLayout(new BorderLayout());
+        setBackground(Color.WHITE); // Set background color
 
+        // Initialize and style the cart items panel
         cartItemsPanel = new JPanel();
         cartItemsPanel.setLayout(new BoxLayout(cartItemsPanel, BoxLayout.Y_AXIS));
-        totalLabel = new JLabel("Total: $0.0");
+        cartItemsPanel.setBackground(Color.WHITE); // Background color for the items panel
+        cartItemsPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Padding
 
+        // Initialize and style the total label
+        totalLabel = new JLabel("Total: $0.0");
+        totalLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        totalLabel.setForeground(new Color(70, 130, 180)); // Set custom color
+        totalLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Padding
+
+        // Initialize and style the checkout button
         checkoutButton = new JButton("Checkout");
+        UIStyle.styleButton(checkoutButton); // Apply styles from UIStyle
+        checkoutButton.setFont(new Font("Arial", Font.BOLD, 14)); // Custom font for button
+        checkoutButton.setBackground(new Color(70, 130, 180)); // Set background color for button
+        checkoutButton.setForeground(Color.WHITE); // Set text color for button
+        checkoutButton.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Padding
+
+        // Add action listener to checkout button
         checkoutButton.addActionListener(e -> checkout());
 
-        add(new JScrollPane(cartItemsPanel), BorderLayout.CENTER);
+        // Create a scroll pane for the cart items
+        JScrollPane scrollPane = new JScrollPane(cartItemsPanel);
+        scrollPane.setBorder(BorderFactory.createTitledBorder("Your Cart")); // Titled border for scroll pane
+
+        // Add components to the CartView
+        add(scrollPane, BorderLayout.CENTER);
         add(totalLabel, BorderLayout.SOUTH);
         add(checkoutButton, BorderLayout.NORTH);
 
-        updateCartDisplay();
+        // Style the layout with margins and padding
+        setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Outer padding
+
+        updateCartDisplay(); // Initial display of cart items
     }
 
     public void updateCartDisplay() {
-        cartItemsPanel.removeAll();
+        cartItemsPanel.removeAll(); // Clear existing items
         List<MenuItem> items = orderController.getCart().getItems();
         double total = 0;
 
         for (MenuItem item : items) {
-            JPanel itemPanel = new JPanel(new BorderLayout());
-            JLabel itemLabel = new JLabel(item.getName() + " - $" + item.getPrice());
-            JButton removeButton = new JButton("Remove");
+            // Create a fixed-size item panel
+            JPanel itemPanel = new JPanel(new BorderLayout()); // Use BorderLayout for left-right alignment
+            itemPanel.setPreferredSize(new Dimension(300, 40)); // Set a fixed size for item panels
+            itemPanel.setBackground(Color.WHITE); // Background color for item panel
+            itemPanel.setBorder(BorderFactory.createLineBorder(new Color(70, 130, 180), 1)); // Border for item panel
 
+            JLabel itemLabel = new JLabel(item.getName() + " - $" + String.format("%.2f", item.getPrice()));
+            itemLabel.setFont(new Font("Arial", Font.PLAIN, 14)); // Set item label font
+            itemLabel.setForeground(new Color(70, 130, 180)); // Set item label color
+            itemLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5)); // Padding for item label
+
+            JButton removeButton = new JButton("Remove");
+            UIStyle.styleButton(removeButton); // Apply styles from UIStyle
+            removeButton.setPreferredSize(new Dimension(100, 30)); // Set button size for "Remove" to fit properly
             removeButton.addActionListener(e -> {
                 orderController.removeItemFromCart(item);
-                updateCartDisplay();
+                updateCartDisplay(); // Refresh the display after removal
             });
 
-            itemPanel.add(itemLabel, BorderLayout.CENTER);
-            itemPanel.add(removeButton, BorderLayout.EAST);
-            cartItemsPanel.add(itemPanel);
+            // Add components to item panel
+            itemPanel.add(itemLabel, BorderLayout.WEST); // Align item label to the left
+            itemPanel.add(removeButton, BorderLayout.EAST); // Align remove button to the right
+            cartItemsPanel.add(itemPanel); // Add the item panel to the main panel
 
-            total += item.getPrice();
+            total += item.getPrice(); // Update total
         }
 
-        totalLabel.setText("Total: $" + total);
+        totalLabel.setText("Total: $" + String.format("%.2f", total)); // Update total amount
 
         revalidate();
-        repaint();
+        repaint(); // Refresh the panel to display changes
     }
 
     public void checkout() {
@@ -78,10 +115,9 @@ public class CartView extends JPanel {
             // Pass the order details to PaymentSelectionView
             new PaymentSelectionView(total, orderDetails, historyView);
 
-            orderController.getCart().clearCart();
+            orderController.getCart().clearCart(); // Clear cart after checkout
 
-            updateCartDisplay();
+            updateCartDisplay(); // Update the display after checkout
         }
     }
-
 }

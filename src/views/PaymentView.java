@@ -2,12 +2,8 @@ package views;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import models.MenuItem;
-import models.OrderDetails;
 import java.util.List;
-import views.*;
+import models.OrderDetails;
 
 public class PaymentView extends JFrame {
     private JLabel totalAmountLabel;
@@ -26,12 +22,22 @@ public class PaymentView extends JFrame {
         setSize(400, 300);
         setLayout(new GridLayout(6, 2, 10, 10));
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        getContentPane().setBackground(new Color(245, 245, 245));
 
         totalAmountLabel = new JLabel("Total Amount: $" + totalAmount);
         cardNumberField = new JTextField(16);
         expiryDateField = new JTextField(5);
         cvvField = new JTextField(3);
         payButton = new JButton("Pay Now");
+
+        // Set custom colors and fonts
+        payButton.setBackground(new Color(100, 150, 250));
+        payButton.setForeground(Color.WHITE);
+        payButton.setFont(new Font("Arial", Font.BOLD, 16));
+        payButton.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2));
+        payButton.setOpaque(true);
+        payButton.setBorderPainted(false);
+        payButton.setFocusPainted(false);
 
         add(new JLabel("Total:"));
         add(totalAmountLabel);
@@ -55,9 +61,9 @@ public class PaymentView extends JFrame {
                 JOptionPane.showMessageDialog(null, "Invalid CVV.", "Payment Error", JOptionPane.ERROR_MESSAGE);
             } else {
                 // Add the order to history and show success message
-                historyView.updateHistory(List.of(orderDetails)); // Assuming this updates the history
+                historyView.updateHistory(List.of(orderDetails));
                 JOptionPane.showMessageDialog(null, "Payment successful!", "Payment Confirmation", JOptionPane.INFORMATION_MESSAGE);
-                dispose(); // Close the payment window
+                dispose();
             }
         });
 
@@ -66,17 +72,14 @@ public class PaymentView extends JFrame {
     }
 
     private boolean isValidCardNumber(String cardNumber) {
-        // Valid if it is 16 digits
         return cardNumber.matches("\\d{16}");
     }
 
     private boolean isValidExpiryDate(String expiryDate) {
-        // Validate the expiry date format MM/YY
         return expiryDate.matches("(0[1-9]|1[0-2])\\/\\d{2}");
     }
 
     private boolean isValidCVV(String cvv) {
-        // Valid if it is 3 digits
         return cvv.matches("\\d{3}");
     }
 }
