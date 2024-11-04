@@ -7,18 +7,19 @@ import models.User;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CartView extends JPanel {
     private final OrderController orderController;
-    private final List<OrderDetails> orderHistory;
     private JPanel cartItemsPanel;
     private JLabel totalLabel;
     private JButton checkoutButton;
+    private HistoryView historyView;
 
-    public CartView(OrderController orderController, User user, List<OrderDetails> orderHistory) {
+    public CartView(OrderController orderController, User user, HistoryView historyView) {
         this.orderController = orderController;
-        this.orderHistory = orderHistory;
+        this.historyView = historyView;
 
         setLayout(new BorderLayout());
 
@@ -59,13 +60,28 @@ public class CartView extends JPanel {
         }
 
         totalLabel.setText("Total: $" + total);
+
         revalidate();
         repaint();
     }
 
     public void checkout() {
-        double total = orderController.checkout();
-        new PaymentSelectionView(total, orderHistory);
-        updateCartDisplay();
+        if (orderController.getCart().getItems().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Your cart is empty. Please add items before checking out.", "Empty Cart", JOptionPane.WARNING_MESSAGE);
+        } else {
+            double total = orderController.checkout();
+            List<MenuItem> cartItems = orderController.getCart().getItems();
+
+            // Create an OrderDetails object with the items in the cart
+            OrderDetails orderDetails = new OrderDetails(total, "", new ArrayList<>(cartItems));
+
+            // Pass the order details to PaymentSelectionView
+            new PaymentSelectionView(total, orderDetails, historyView);
+
+            orderController.getCart().clearCart();
+
+            updateCartDisplay();
+        }
     }
+
 }

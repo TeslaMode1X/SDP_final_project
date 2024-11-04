@@ -43,4 +43,12 @@ public class UIStyle {
         dialog.getContentPane().setBackground(new Color(255, 255, 255));
         dialog.setVisible(true);
     }
+
+    public static void styleHistoryView(JPanel historyPanel) {
+        historyPanel.setBackground(Color.WHITE);
+        JLabel titleLabel = new JLabel("Order History", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        titleLabel.setForeground(new Color(70, 130, 180));
+        historyPanel.add(titleLabel, BorderLayout.NORTH);
+    }
 }
