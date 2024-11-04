@@ -26,8 +26,7 @@ public class OrderController {
     }
 
     public double checkout() {
-        double total = cart.getTotalPrice();
-        cart.clearCart(); // Очищаем корзину после оформления заказа
-        return total;
+        return cart.getTotalPrice();
     }
+
 }
