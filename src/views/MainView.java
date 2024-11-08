@@ -3,20 +3,20 @@ package views;
 import controllers.MenuController;
 import controllers.OrderController;
 import models.OrderDetails;
+import models.OrderHistoryManager;
 import models.User;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainView extends JFrame {
     private JLabel userNameLabel = new JLabel("", SwingConstants.CENTER);
     private JButton logoutButton = new JButton("Log out");
-    private List<OrderDetails> orderHistory = new ArrayList<>();
 
     public MainView(String userName, User user) {
+
         setTitle("Main Application");
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -27,10 +27,13 @@ public class MainView extends JFrame {
         JTabbedPane tabbedPane = new JTabbedPane();
         styleTabbedPane(tabbedPane); // Apply button styles to the tabs
 
-        // History
-        HistoryView historyView = new HistoryView(userName, orderHistory);
+        // Access the global order history from OrderHistoryManager
+        List<OrderDetails> globalOrderHistory = OrderHistoryManager.getInstance().getOrderHistory();
 
-        // Creating CartView with orderController and user
+        // Create HistoryView with the persistent order history
+        HistoryView historyView = new HistoryView(userName, globalOrderHistory);
+
+        // Creating CartView with orderController and passing historyView
         CartView cartView = new CartView(orderController, user, historyView);
 
         // Menu Tab
@@ -45,6 +48,7 @@ public class MainView extends JFrame {
         // Adding HistoryView to the "History" tab
         tabbedPane.add("History", historyView);
 
+        // Log Out Tab
         LogoutView logoutView = new LogoutView(userName);
         logoutView.setLogoutButton(logoutButton);
         tabbedPane.add("Log out", logoutView);
