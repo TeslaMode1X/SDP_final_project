@@ -8,7 +8,7 @@ import views.UserView;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class UserController {
+public class UserController implements UserActionObserver {
     private UserModel model;
     private UserView view;
     private MainView mainView;
@@ -17,58 +17,70 @@ public class UserController {
         this.model = model;
         this.view = view;
 
-        view.addLoginListener(new LoginListener());
-        view.addRegisterListener(new RegisterListener());
+        // Register this controller as an observer to UserView
+        view.addObserver(this);
     }
 
-    class LoginListener implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-            String email = view.getEmail();
-            String password = view.getPassword();
-
-            User user = model.authenticate(email, password);
-            if (user != null) {
-                view.showMessage("Welcome, " + user.getName() + "!");
-                openMainView(user); // Pass the User object
-            } else {
-                view.showMessage("Invalid email or password.");
-            }
+    // Implementation of Observer methods
+    @Override
+    public void onLogin(String email, String password) {
+        User user = model.authenticate(email, password);
+        if (user != null) {
+            view.showMessage("Welcome, " + user.getName() + "!");
+            openMainView(user);
+        } else {
+            view.showMessage("Invalid email or password.");
         }
     }
 
-    class RegisterListener implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-            String email = view.getEmail();
-            String password = view.getPassword();
-            String name = view.getName();
+    @Override
+    public void onRegister(String email, String password, String name) {
+        if (model.userExists(email)) {
+            view.showMessage("User with this email already exists. Please log in.");
+            return;
+        }
 
-            // Check if user already exists
-            if (model.userExists(email)) {
-                view.showMessage("User with this email already exists. Please log in.");
-                return; // Exit the method if the user exists
-            }
-
-            if (!email.isEmpty() && !password.isEmpty() && !name.isEmpty()) {
-                model.addUser(new User(email, password, name));
-                view.showMessage("Registration successful!");
-                openMainView(new User(email, password, name)); // Pass the registered User
-            } else {
-                view.showMessage("Please fill in all fields.");
-            }
+        if (!email.isEmpty() && !password.isEmpty() && !name.isEmpty()) {
+            model.addUser(new User(email, password, name));
+            view.showMessage("Registration successful!");
+            openMainView(new User(email, password, name));
+        } else {
+            view.showMessage("Please fill in all fields.");
         }
     }
 
     private void openMainView(User user) {
-        mainView = new MainView(user.getName(), user); // Pass name and User object
+        mainView = new MainView(user.getName(), user);
         mainView.setVisible(true);
         mainView.addLogoutListener(new LogoutListener());
-        view.dispose(); // Close the login/register window
+        view.dispose();
     }
 
     class LogoutListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            mainView.dispose(); // Close the main view
-            view.setVisible(true); // Show the UserView again
+            mainView.dispose();
+            view.setVisible(true);
         }
+    }
+}
+
+// Define a UserAction interface for strategy pattern
+interface UserAction {
+    void execute(UserController controller, String email, String password, String name);
+}
+
+// Concrete strategy for LoginAction
+class LoginAction implements UserAction {
+    @Override
+    public void execute(UserController controller, String email, String password, String name) {
+        controller.onLogin(email, password);
+    }
+}
+
+// Concrete strategy for RegisterAction
+class RegisterAction implements UserAction {
+    @Override
+    public void execute(UserController controller, String email, String password, String name) {
+        controller.onRegister(email, password, name);
     }
 }
