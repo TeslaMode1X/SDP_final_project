@@ -64,16 +64,14 @@ public class PaymentSelectionView extends JFrame {
                 "Confirmation",
                 JOptionPane.INFORMATION_MESSAGE);
 
-        // Now print the updated order details
-        System.out.println(orderDetails);
-
-        // Update the history view with the new order details
-        historyView.updateHistory(List.of(orderDetails));
-
-        dispose();
-
-        if (method.equals("By Card")) {
+        // If the payment method is "On Delivery", update history directly
+        if (method.equals("On Delivery")) {
+            historyView.updateHistory(List.of(orderDetails));
+        } else if (method.equals("By Card")) {
+            // Only open the PaymentView and wait for successful payment to update history
             new PaymentView(totalAmount, orderDetails, historyView);
         }
+
+        dispose(); // Close the PaymentSelectionView
     }
 }
